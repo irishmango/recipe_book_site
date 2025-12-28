@@ -38,28 +38,30 @@
       "cookingTime": "35 minutes"
     },
     {
-      "id": "65d4",
-      "title": "Burger Madness",
+      "title": "Hamburger",
       "ingredients": [
-        "patty",
-        "mushrooms",
-        "sauce",
-        "bun"
+        "lettuce",
+        "tomato",
+        "buns",
+        "ketchup",
+        "burger patties"
       ],
-      "method": "make the burger",
-      "cookingTime": "20 minutes"
+      "method": "cook burger patties, toast the buns, assemble the burger",
+      "cookingTime": "15 minutes",
+      "id": "NB3Mp1u"
     },
     {
-      "id": "8a08",
-      "title": "Taco Tuesday",
+      "title": "Mushroom Ristotto",
       "ingredients": [
-        "tortillas",
-        "meat",
-        "cheese",
-        "pico de gallo"
+        "dried mushrooms",
+        "risotto rice",
+        "chicken stock",
+        "salt",
+        "petter"
       ],
-      "method": "make the tacos",
-      "cookingTime": "30 minutes"
+      "method": "toast the risotto rice for 5mins. add chicken stock slowly while constantly stiring until the rice starts to soften. add butter. close lid. leave set for 10mins.",
+      "cookingTime": "45 minutes",
+      "id": "jDNXcGs"
     }
   ]
 }

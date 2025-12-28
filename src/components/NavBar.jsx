@@ -1,4 +1,5 @@
 import { Link, NavLink } from 'react-router-dom'
+import { useTheme } from '../hooks/useTheme'
 
 // styles
 import './NavBar.css'
@@ -7,13 +8,16 @@ import './NavBar.css'
 import SearchBar from './SearchBar'
 
 
+
 export default function NavBar() {
+    const { color } = useTheme()
+
     return (
-        <div className="navbar">
+        <div className="navbar" style={{ background: color }}>
             <nav>
                 <NavLink to="/" className="brand"><h1>Cooking Ninja</h1></NavLink>
                 <SearchBar />
-                <NavLink to="/search">Search Recipes</NavLink>
+                <NavLink to="/create">Create Recipe</NavLink>
             </nav>
         </div>
     )
