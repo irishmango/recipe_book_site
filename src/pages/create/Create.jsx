@@ -1,46 +1,53 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-
-import { useFetch } from '../../hooks/useFetch'
+// import { useFetch } from '../../hooks/useFetch'   // remove
+import { db } from '../../firebase/config'
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore'
 
 // styles
 import './Create.css'
 
 export default function Create() {
-    const [title, setTitle] = useState('');
-    const [method, setMethod] = useState('');
-    const [cookingTime, setCookingTime] = useState('');
-    const [newIngredient, setNewIngredient] = useState('');
-    const [ingredients, setIngredients] = useState([]);
-    const ingredientsInput = useRef(null);
-    const navigate = useNavigate();
+    const [title, setTitle] = useState('')
+    const [method, setMethod] = useState('')
+    const [cookingTime, setCookingTime] = useState('')
+    const [newIngredient, setNewIngredient] = useState('')
+    const [ingredients, setIngredients] = useState([])
+    const [isPending, setIsPending] = useState(false)
+    const [error, setError] = useState(null)
+    const ingredientsInput = useRef(null)
+    const navigate = useNavigate()
 
-    const { postData, data, error } = useFetch('http://localhost:3000/recipes', 'POST');
-
-
-    useEffect(() => {
-        if (data) {
-            // navigate to home page
-            navigate('/');
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setIsPending(true)
+        setError(null)
+        try {
+            const recipe = {
+                title,
+                ingredients,
+                method,
+                cookingTime: `${cookingTime} minutes`,
+                createdAt: serverTimestamp()
+            }
+            const docRef = await addDoc(collection(db, 'recipes'), recipe)
+            navigate(`/recipes/${docRef.id}`)
+        } catch (e) {
+            console.error(e)
+            setError('Failed to add recipe')
+        } finally {
+            setIsPending(false)
         }
-    }, [data, navigate])
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const recipe = { title, ingredients, method, cookingTime: cookingTime + ' minutes' }
-        postData(recipe);
     }
 
     const handleAdd = (e) => {
-        e.preventDefault();
-        const ing = newIngredient.trim();
-
+        e.preventDefault()
+        const ing = newIngredient.trim()
         if (ing && !ingredients.includes(ing)) {
-            setIngredients(prevIngredients => [...prevIngredients, ing]);
+            setIngredients(prev => [...prev, ing])
         }
-        setNewIngredient('');
-        ingredientsInput.current.focus();
-
+        setNewIngredient('')
+        ingredientsInput.current?.focus()
     }
 
     return (
@@ -67,7 +74,7 @@ export default function Create() {
                             value={newIngredient}
                             ref={ingredientsInput}
                         />
-                        <button className='btn' onClick={handleAdd}>Add</button>
+                        <button className='btn' onClick={handleAdd} type="button">Add</button>
                     </div>
                 </label>
                 <p>Current Ingredients: {ingredients.map(i => <em key={i}>{i}, </em>)}</p>
@@ -90,7 +97,8 @@ export default function Create() {
                     />
                 </label>
 
-                <button className='btn'>Submit</button>
+                <button className='btn' disabled={isPending}>{isPending ? 'Saving…' : 'Submit'}</button>
+                {error && <p className="error">{error}</p>}
             </form>
 
         </div>
